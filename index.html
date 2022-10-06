@@ -25,7 +25,9 @@
 						<span class="label-text-alt"></span>
 					</label>
 				</div>
-				<button class="btn btn-ghost m-2 my-6" id="enter-btn">Save</button>
+				<button class="btn btn-ghost m-2 my-6" id="enter-btn" type="submit">
+					Add
+				</button>
 				<div class="dropdown dropdown-end">
 					<label tabindex="0" class="btn btn-ghost m-1">Sort</label>
 					<ul
@@ -40,7 +42,10 @@
 				</div>
 			</div>
 
-			<ul class="display: flex justify-center" id="app"></ul>
+			<ul
+				class="display: flex justify-center items-center flex-col-reverse overflow-y-auto"
+				id="app"
+			></ul>
 		</div>
 
 		<script type="module" src="/main.js"></script>
