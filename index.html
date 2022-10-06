@@ -6,38 +6,43 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>List App</title>
 	</head>
-	<body>
-		<div class="display: flex justify-center items-center">
-			<div class="form-control w-full max-w-xs">
-				<label class="label">
-					<span class="label-text">What to do?</span>
-					<span class="label-text-alt"></span>
-				</label>
-				<input
-					type="text"
-					placeholder="..."
-					class="input input-bordered w-full max-w-xs"
-					id="text-input"
-				/>
-				<label class="label">
-					<span class="label-text-alt"></span>
-					<span class="label-text-alt"></span>
-				</label>
-				<div class="dropdown dropdown-hover">
-					<label tabindex="0" class="btn m-1">Hover</label>
+	<body class="">
+		<div class="block overflow-hidden m-2 min-h-screen" id="app-container">
+			<div class="display: flex items-center justify-center" id="form">
+				<div class="form-control w-full max-w-xs">
+					<label class="label">
+						<span class="label-text">What to do?</span>
+						<span class="label-text-alt"></span>
+					</label>
+					<input
+						type="text"
+						placeholder="..."
+						class="input input-bordered w-full m-2 max-w-xs"
+						id="text-input"
+					/>
+					<label class="label">
+						<span class="label-text-alt"></span>
+						<span class="label-text-alt"></span>
+					</label>
+				</div>
+				<button class="btn btn-ghost m-2 my-6" id="enter-btn">Save</button>
+				<div class="dropdown dropdown-end">
+					<label tabindex="0" class="btn btn-ghost m-1">Sort</label>
 					<ul
 						tabindex="0"
-						class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+						class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-40"
 						id="dropdown"
 					>
-						<li><a>Item 1</a></li>
-						<li><a>Item 2</a></li>
+						<li id="all"><a>All</a></li>
+						<li id="completed"><a>Completed</a></li>
+						<li id="uncompleted"><a>Uncompleted</a></li>
 					</ul>
 				</div>
 			</div>
+
+			<ul class="display: flex justify-center" id="app"></ul>
 		</div>
-		<div class="display: flex justify-center p-6"></div>
-		<div class="display: flex justify-center" id="app"></div>
+
 		<script type="module" src="/main.js"></script>
 	</body>
 </html>
