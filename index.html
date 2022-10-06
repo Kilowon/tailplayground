@@ -4,10 +4,40 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Vite App</title>
+		<title>List App</title>
 	</head>
 	<body>
-		<div id="app"></div>
+		<div class="display: flex justify-center items-center">
+			<div class="form-control w-full max-w-xs">
+				<label class="label">
+					<span class="label-text">What to do?</span>
+					<span class="label-text-alt"></span>
+				</label>
+				<input
+					type="text"
+					placeholder="..."
+					class="input input-bordered w-full max-w-xs"
+					id="text-input"
+				/>
+				<label class="label">
+					<span class="label-text-alt"></span>
+					<span class="label-text-alt"></span>
+				</label>
+				<div class="dropdown dropdown-hover">
+					<label tabindex="0" class="btn m-1">Hover</label>
+					<ul
+						tabindex="0"
+						class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+						id="dropdown"
+					>
+						<li><a>Item 1</a></li>
+						<li><a>Item 2</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="display: flex justify-center p-6"></div>
+		<div class="display: flex justify-center" id="app"></div>
 		<script type="module" src="/main.js"></script>
 	</body>
 </html>
