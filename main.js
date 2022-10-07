@@ -47,8 +47,8 @@ function createListItems(text) {
 	containerDiv.appendChild(elementLi)
 
 	const completedBtn = document.createElement('div')
-	if (text.value === undefined) {
-		elementLi.innerText = text
+	if (text.value === '' || undefined) {
+		return
 	} else {
 		elementLi.innerText = text.value
 	}
@@ -81,28 +81,3 @@ function createListItems(text) {
 
 	list.appendChild(containerDiv)
 }
-
-async function getRequestedData(request) {
-	const requested = request.map(req => fetch(req))
-	const promise = Promise.all([...requested])
-	const responce = await promise
-	console.log()
-
-	const json = await Promise.allSettled(responce.map(res => res.json()))
-
-	json.map(data => {
-		console.log(data.value)
-		// load data to local storage to be used later
-		localStorage.setItem('data', JSON.stringify(data.value))
-	})
-}
-
-function saveData() {
-	const getLocalData = JSON.parse(localStorage.getItem('data'))
-	const json = JSON.stringify(getLocalData)
-	const blob = new Blob([json], { type: 'application/json' })
-	const upload = URL.createObjectURL(blob)
-	return upload
-}
-
-getRequestedData(['/data.json'])
