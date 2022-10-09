@@ -21,7 +21,7 @@ textInput.addEventListener('keyup', function (event) {
 function appendTextToList(event) {
 	event.preventDefault()
 	createListItems(textInput)
-	getValueList()
+	nodeListToArray()
 	textInput.value = ''
 }
 
@@ -79,7 +79,7 @@ function removeSelectedElement(e) {
 	const selectedElementId = trashIcon.parentElement.id
 	if ((selectedElementId === 'element-container' || 'completed-element') && trashIcon.id === 'trash-btn') {
 		selectedElement.remove()
-		getValueList()
+		nodeListToArray()
 	} else {
 		return
 	}
@@ -96,17 +96,18 @@ function completedElement(e) {
 		selectedElement.classList.remove('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
 		selectedElement.classList.add('text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
 		selectedElement.id = 'completed-element'
-		getValueList()
+		nodeListToArray()
 	} else if (selectedElementId === 'completed-element') {
 		selectedElement.classList.remove('text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
 		selectedElement.classList.add('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
 		selectedElement.id = 'element-container'
-		getValueList()
+		nodeListToArray()
 	} else {
 		return
 	}
 }
 function browserPreserveData(input) {
+	localStorage.clear()
 	let inputs
 	if (localStorage.getItem('data') === null) {
 		inputs = []
@@ -117,7 +118,7 @@ function browserPreserveData(input) {
 	localStorage.setItem('data', JSON.stringify(inputs))
 }
 
-function getValueList() {
+function nodeListToArray() {
 	let target = []
 	target = list.childNodes
 	const targetValue = Array.from(target).map(item => item.innerText)
@@ -127,5 +128,5 @@ function getValueList() {
 	for (let i = 0; i < targetValue.length; i++) {
 		targetArray.push({ id: targetId[i], value: targetValue[i] })
 	}
-	console.log(targetArray)
+	browserPreserveData(targetArray)
 }
