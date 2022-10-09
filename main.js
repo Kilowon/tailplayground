@@ -5,6 +5,7 @@ const dropdown = document.querySelector('#dropdown')
 const list = document.querySelector('#app')
 const enterBtn = document.querySelector('#enter-btn')
 
+document.addEventListener('DOMContentLoaded', getSave)
 enterBtn.addEventListener('click', appendTextToList)
 list.addEventListener('click', removeSelectedElement)
 list.addEventListener('click', completedElement)
@@ -20,15 +21,22 @@ textInput.addEventListener('keyup', function (event) {
 
 function appendTextToList(event) {
 	event.preventDefault()
-	createListItems(textInput)
+	createListItems(textInput, 0)
 	nodeListToArray()
 	textInput.value = ''
 }
 
-function createListItems(text) {
+function createListItems(text, id) {
 	const containerDiv = document.createElement('div')
 	containerDiv.classList.add('flex', 'items-center', 'justify-center', 'w-full', 'max-w-md', 'text-sm', 'font-medium', 'text-gray-900', 'bg-white', 'rounded-lg', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
 	containerDiv.id = 'element-container'
+
+	if (id.id === 'completed-element') {
+		console.log('com ele')
+		containerDiv.classList.add('text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
+		containerDiv.classList.remove('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
+		containerDiv.id = 'completed-element'
+	}
 
 	const elementLi = document.createElement('li')
 	elementLi.classList.add('py-2', 'px-4', 'w-full', 'rounded-t-lg', 'border-b', 'border-gray-200', 'dark:border-gray-600')
@@ -129,4 +137,16 @@ function nodeListToArray() {
 		targetArray.push({ id: targetId[i], value: targetValue[i] })
 	}
 	browserPreserveData(targetArray)
+}
+
+function getSave() {
+	let save
+	if (localStorage.getItem('data') === null) {
+		save = [[]]
+	} else {
+		save = JSON.parse(localStorage.getItem('data'))
+	}
+	save[0].forEach(function (save) {
+		createListItems(save, save)
+	})
 }
