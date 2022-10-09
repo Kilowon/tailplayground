@@ -27,7 +27,7 @@ function appendTextToList(event) {
 
 function createListItems(text) {
 	const containerDiv = document.createElement('div')
-	containerDiv.classList.add('flex', 'items-center', 'justify-center', 'w-80', 'text-sm', 'font-medium', 'text-gray-900', 'bg-white', 'rounded-lg', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
+	containerDiv.classList.add('flex', 'items-center', 'justify-center', 'w-full', 'max-w-md', 'text-sm', 'font-medium', 'text-gray-900', 'bg-white', 'rounded-lg', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
 	containerDiv.id = 'element-container'
 
 	const elementLi = document.createElement('li')
