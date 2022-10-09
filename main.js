@@ -33,7 +33,7 @@ function createListItems(text, id) {
 
 	if (id.id === 'completed-element') {
 		console.log('com ele')
-		containerDiv.classList.add('text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
+		containerDiv.classList.add('line-through', 'text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
 		containerDiv.classList.remove('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
 		containerDiv.id = 'completed-element'
 	}
@@ -102,11 +102,11 @@ function completedElement(e) {
 	//toggle completed element with tailwind classes
 	if (selectedElementId === 'element-container') {
 		selectedElement.classList.remove('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
-		selectedElement.classList.add('text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
+		selectedElement.classList.add('line-through', 'text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
 		selectedElement.id = 'completed-element'
 		nodeListToArray()
 	} else if (selectedElementId === 'completed-element') {
-		selectedElement.classList.remove('text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
+		selectedElement.classList.remove('line-through', 'text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
 		selectedElement.classList.add('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
 		selectedElement.id = 'element-container'
 		nodeListToArray()
