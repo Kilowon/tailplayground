@@ -5,7 +5,7 @@ const dropdown = document.querySelector('#dropdown')
 const list = document.querySelector('#app')
 const enterBtn = document.querySelector('#enter-btn')
 
-enterBtn.addEventListener('click', appendToList)
+enterBtn.addEventListener('click', appendTextToList)
 list.addEventListener('click', removeSelectedElement)
 list.addEventListener('click', completedElement)
 
@@ -13,46 +13,25 @@ list.addEventListener('click', completedElement)
 textInput.addEventListener('keyup', function (event) {
 	if (event.keyCode === 13) {
 		event.preventDefault()
+		browserPreserveData(textInput.value)
 		enterBtn.click()
 	}
 })
 
-function appendToList(event) {
+function appendTextToList(event) {
 	event.preventDefault()
 	createListItems(textInput)
+	getValueList()
 	textInput.value = ''
 }
 
 function createListItems(text) {
 	const containerDiv = document.createElement('div')
-	containerDiv.classList.add(
-		'flex',
-		'items-center',
-		'justify-center',
-		'w-80',
-		'text-sm',
-		'font-medium',
-		'text-gray-900',
-		'bg-white',
-		'rounded-lg',
-		'border',
-		'border-gray-200',
-		'dark:bg-gray-700',
-		'dark:border-gray-600',
-		'dark:text-white'
-	)
+	containerDiv.classList.add('flex', 'items-center', 'justify-center', 'w-80', 'text-sm', 'font-medium', 'text-gray-900', 'bg-white', 'rounded-lg', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
 	containerDiv.id = 'element-container'
 
 	const elementLi = document.createElement('li')
-	elementLi.classList.add(
-		'py-2',
-		'px-4',
-		'w-full',
-		'rounded-t-lg',
-		'border-b',
-		'border-gray-200',
-		'dark:border-gray-600'
-	)
+	elementLi.classList.add('py-2', 'px-4', 'w-full', 'rounded-t-lg', 'border-b', 'border-gray-200', 'dark:border-gray-600')
 	elementLi.id = 'text-element'
 	containerDiv.appendChild(elementLi)
 
@@ -98,11 +77,9 @@ function removeSelectedElement(e) {
 	const trashIcon = e.target
 	const selectedElement = trashIcon.parentElement
 	const selectedElementId = trashIcon.parentElement.id
-	if (
-		selectedElementId === 'element-container' &&
-		trashIcon.id === 'trash-btn'
-	) {
+	if ((selectedElementId === 'element-container' || 'completed-element') && trashIcon.id === 'trash-btn') {
 		selectedElement.remove()
+		getValueList()
 	} else {
 		return
 	}
@@ -110,52 +87,45 @@ function removeSelectedElement(e) {
 
 function completedElement(e) {
 	const checkIcon = e.target
+	if (checkIcon.parentElement.parentElement.parentElement === null) return
 	const selectedElement = checkIcon.parentElement.parentElement.parentElement
-	const selectedElementId =
-		checkIcon.parentElement.parentElement.parentElement.id
+	const selectedElementId = checkIcon.parentElement.parentElement.parentElement.id
 
 	//toggle completed element with tailwind classes
 	if (selectedElementId === 'element-container') {
-		selectedElement.classList.remove(
-			'text-gray-900',
-			'bg-white',
-			'border',
-			'border-gray-200',
-			'dark:bg-gray-700',
-			'dark:border-gray-600',
-			'dark:text-white'
-		)
-		selectedElement.classList.add(
-			'text-gray-400',
-			'bg-gray-200',
-			'border',
-			'border-gray-200',
-			'dark:bg-gray-600',
-			'dark:border-gray-600',
-			'dark:text-gray-400'
-		)
+		selectedElement.classList.remove('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
+		selectedElement.classList.add('text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
 		selectedElement.id = 'completed-element'
+		getValueList()
 	} else if (selectedElementId === 'completed-element') {
-		selectedElement.classList.remove(
-			'text-gray-400',
-			'bg-gray-200',
-			'border',
-			'border-gray-200',
-			'dark:bg-gray-600',
-			'dark:border-gray-600',
-			'dark:text-gray-400'
-		)
-		selectedElement.classList.add(
-			'text-gray-900',
-			'bg-white',
-			'border',
-			'border-gray-200',
-			'dark:bg-gray-700',
-			'dark:border-gray-600',
-			'dark:text-white'
-		)
+		selectedElement.classList.remove('text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
+		selectedElement.classList.add('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
 		selectedElement.id = 'element-container'
+		getValueList()
 	} else {
 		return
 	}
+}
+function browserPreserveData(input) {
+	let inputs
+	if (localStorage.getItem('data') === null) {
+		inputs = []
+	} else {
+		inputs = JSON.parse(localStorage.getItem('data'))
+	}
+	inputs.push(input)
+	localStorage.setItem('data', JSON.stringify(inputs))
+}
+
+function getValueList() {
+	let target = []
+	target = list.childNodes
+	const targetValue = Array.from(target).map(item => item.innerText)
+	const targetId = Array.from(target).map(item => item.id)
+	//create a third array with the id and value objects
+	const targetArray = []
+	for (let i = 0; i < targetValue.length; i++) {
+		targetArray.push({ id: targetId[i], value: targetValue[i] })
+	}
+	console.log(targetArray)
 }
