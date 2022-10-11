@@ -44,21 +44,25 @@
 
 			<!-- Put this part before </body> tag -->
 			<input type="checkbox" id="save-modal" class="modal-toggle" />
-			<div class="modal">
-				<div class="modal-box">
-					<h3 class="font-bold text-lg m-1">Type name to save .... Press Enter</h3>
+			<label for="save-modal" class="modal cursor-pointer">
+				<label class="modal-box relative" for="save-modal">
+					<h3 class="font-bold text-lg m-1"></h3>
 
 					<div class="display: flex items-center justify-center" id="form">
 						<div class="form-control w-full max-w-md m-2">
+							<label class="label">
+								<span class="label-text-alt"><label for="save-modal" class="btn btn-ghost" id="save-list-name">Save</label></span>
+								<span class="label-text-alt"><label for="save-modal" class="btn btn-ghost" id="cancel">Cancel</label></span>
+							</label>
 							<input type="text" placeholder="" class="input input-bordered input-med" id="text-input-modal" />
 						</div>
 					</div>
-					<h3 class="font-bold text-lg m-1">Load Save</h3>
+					<h3 class="font-normal text-sm m-1">LOAD LIST</h3>
 					<ul tabindex="1" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-full" id="list-modal">
-						<li id="all"><label for="save-modal" class="btn btn-ghost">Save 1</label></li>
+						<li id="all"><label for="save-modal" class="btn btn-ghost" id="save-1">Save 1</label></li>
 					</ul>
-				</div>
-			</div>
+				</label>
+			</label>
 		</div>
 	</body>
 </html>

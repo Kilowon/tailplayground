@@ -6,17 +6,19 @@ const list = document.querySelector('#app')
 const enterBtn = document.querySelector('#enter-btn')
 const title = document.querySelector('#app-title')
 const textInputModal = document.querySelector('#text-input-modal')
+const enterBtnModal = document.querySelector('#save-list-name')
 
 document.addEventListener('DOMContentLoaded', getSave)
 enterBtn.addEventListener('click', appendTextToList)
 list.addEventListener('click', removeSelectedElement)
 list.addEventListener('click', completedElement)
+enterBtnModal.addEventListener('click', appendModalTextToTitle)
 
 //event listener for text input on enter key
 textInput.addEventListener('keyup', function (event) {
 	if (event.keyCode === 13) {
 		event.preventDefault()
-		browserPreserveData(textInput.value)
+		browserPreserveData()
 		enterBtn.click()
 	}
 })
@@ -24,8 +26,7 @@ textInput.addEventListener('keyup', function (event) {
 textInputModal.addEventListener('keyup', function (event) {
 	if (event.keyCode === 13) {
 		event.preventDefault()
-		//browserPreserveData(textInput.value)
-		appendModalTextToTitle()
+		enterBtnModal.click()
 	}
 })
 
@@ -40,7 +41,7 @@ function appendModalTextToTitle(event) {
 	event.preventDefault()
 	createTitle(textInputModal, 0)
 
-	textInput.value = ''
+	textInputModal.value = ''
 }
 
 function createListItems(text, id) {
@@ -175,7 +176,7 @@ function getSave() {
 }
 
 function createTitle(text, id) {
-	const containerDiv = document.createElement('div')
+	/* const containerDiv = document.createElement('div')
 	containerDiv.classList.add('flex', 'items-center', 'justify-center', 'w-full', 'max-w-md', 'text-sm', 'font-medium', 'text-gray-900', 'bg-white', 'rounded-lg', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
 	containerDiv.id = 'element-container'
 
@@ -197,4 +198,9 @@ function createTitle(text, id) {
 	}
 
 	title.appendChild(containerDiv)
+} */
+
+	title.innerHTML = `<div class="flex items-center justify-center w-full max-w-md text-lg font-semibold text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-600 dark:border-gray-500 dark:text-white" id="element-container">
+		<li class="py-2 px-4 w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600" id="text-element">Title of List</li>
+	</div>`
 }
