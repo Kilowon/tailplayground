@@ -4,6 +4,8 @@ const textInput = document.querySelector('#text-input')
 const dropdown = document.querySelector('#dropdown')
 const list = document.querySelector('#app')
 const enterBtn = document.querySelector('#enter-btn')
+const title = document.querySelector('#app-title')
+const textInputModal = document.querySelector('#text-input-modal')
 
 document.addEventListener('DOMContentLoaded', getSave)
 enterBtn.addEventListener('click', appendTextToList)
@@ -19,10 +21,25 @@ textInput.addEventListener('keyup', function (event) {
 	}
 })
 
+textInputModal.addEventListener('keyup', function (event) {
+	if (event.keyCode === 13) {
+		event.preventDefault()
+		//browserPreserveData(textInput.value)
+		appendModalTextToTitle()
+	}
+})
+
 function appendTextToList(event) {
 	event.preventDefault()
 	createListItems(textInput, 0)
 	nodeListToArray()
+	textInput.value = ''
+}
+
+function appendModalTextToTitle(event) {
+	event.preventDefault()
+	createTitle(textInputModal, 0)
+
 	textInput.value = ''
 }
 
@@ -32,7 +49,6 @@ function createListItems(text, id) {
 	containerDiv.id = 'element-container'
 
 	if (id.id === 'completed-element') {
-		console.log('com ele')
 		containerDiv.classList.add('line-through', 'text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
 		containerDiv.classList.remove('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
 		containerDiv.id = 'completed-element'
@@ -51,23 +67,17 @@ function createListItems(text, id) {
 		elementLi.innerText = text.value
 	}
 	completedBtn.classList.add('completed-btn')
-	completedBtn.innerHTML = `<label class="swap swap-rotate">
-  
-	<!-- this hidden checkbox controls the state -->
-	<input type="checkbox" />
-	
-	<!-- green check -->
-	<div class="swap-on  text-green-600"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-	<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-  </svg>
-  </div>
-	
-	<!-- muted check -->
-  <div class="swap-off text-gray-500"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-</svg>
-</div>
-  </label>`
+	completedBtn
+	if (id.id === 'completed-element') {
+		completedBtn.classList.add('btn', 'btn-sm', 'btn-ghost', 'text-green-600')
+		completedBtn.id = 'check-on'
+		completedBtn.innerHTML = `<div class="pointer-events-none"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg></div>`
+	} else {
+		completedBtn.classList.add('btn', 'btn-sm', 'btn-ghost', 'text-gray-500')
+		completedBtn.id = 'check-off'
+		completedBtn.innerHTML = `<div class="pointer-events-none"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg></div>`
+	}
+
 	containerDiv.appendChild(completedBtn)
 
 	const trashBtn = document.createElement('button')
@@ -83,6 +93,7 @@ function createListItems(text, id) {
 
 function removeSelectedElement(e) {
 	const trashIcon = e.target
+	//console.log(trashIcon)
 	const selectedElement = trashIcon.parentElement
 	const selectedElementId = trashIcon.parentElement.id
 	if ((selectedElementId === 'element-container' || 'completed-element') && trashIcon.id === 'trash-btn') {
@@ -95,10 +106,21 @@ function removeSelectedElement(e) {
 
 function completedElement(e) {
 	const checkIcon = e.target
-	if (checkIcon.parentElement.parentElement.parentElement === null) return
-	const selectedElement = checkIcon.parentElement.parentElement.parentElement
-	const selectedElementId = checkIcon.parentElement.parentElement.parentElement.id
-
+	console.log(checkIcon)
+	if (checkIcon.parentElement.parentElement === null) return
+	const selectedElement = checkIcon.parentElement
+	const selectedElementId = checkIcon.parentElement.id
+	if (checkIcon.id === 'check-on') {
+		checkIcon.classList.remove('text-green-600')
+		checkIcon.classList.add('text-gray-500')
+		checkIcon.id = 'check-off'
+	} else if (checkIcon.id === 'check-off') {
+		checkIcon.classList.remove('text-gray-500')
+		checkIcon.classList.add('text-green-600')
+		checkIcon.id = 'check-on'
+	} else {
+		return
+	}
 	//toggle completed element with tailwind classes
 	if (selectedElementId === 'element-container') {
 		selectedElement.classList.remove('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
@@ -114,6 +136,7 @@ function completedElement(e) {
 		return
 	}
 }
+
 function browserPreserveData(input) {
 	localStorage.clear()
 	let inputs
@@ -149,4 +172,29 @@ function getSave() {
 	save[0].forEach(function (save) {
 		createListItems(save, save)
 	})
+}
+
+function createTitle(text, id) {
+	const containerDiv = document.createElement('div')
+	containerDiv.classList.add('flex', 'items-center', 'justify-center', 'w-full', 'max-w-md', 'text-sm', 'font-medium', 'text-gray-900', 'bg-white', 'rounded-lg', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
+	containerDiv.id = 'element-container'
+
+	if (id.id === 'completed-element') {
+		containerDiv.classList.add('line-through', 'text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
+		containerDiv.classList.remove('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
+		containerDiv.id = 'completed-element'
+	}
+
+	const elementLi = document.createElement('li')
+	elementLi.classList.add('py-2', 'px-4', 'w-full', 'rounded-t-lg', 'border-b', 'border-gray-200', 'dark:border-gray-600')
+	elementLi.id = 'text-element'
+	containerDiv.appendChild(elementLi)
+
+	if (text.value === '' || undefined) {
+		return
+	} else {
+		elementLi.innerText = text.value
+	}
+
+	title.appendChild(containerDiv)
 }
