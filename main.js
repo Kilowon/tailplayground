@@ -7,6 +7,7 @@ const enterBtn = document.querySelector('#enter-btn')
 const title = document.querySelector('#app-title')
 const textInputModal = document.querySelector('#text-input-modal')
 const enterBtnModal = document.querySelector('#save-list-name')
+const listModel = document.querySelector('#list-modal')
 
 document.addEventListener('DOMContentLoaded', getSave)
 enterBtn.addEventListener('click', appendTextToList)
@@ -92,6 +93,19 @@ function createListItems(text, id) {
 	list.appendChild(containerDiv)
 }
 
+function createSaveListElements(data) {
+	const elementLi = document.createElement('li')
+	elementLi.id = 'all'
+
+	const elementLabel = document.createElement('label')
+	elementLabel.classList.add('btn', 'btn-ghost')
+	elementLabel.setAttribute('for', 'save-modal')
+	elementLabel.id = 'save-1'
+	elementLabel.innerHTML = data
+	elementLi.appendChild(elementLabel)
+	listModel.appendChild(elementLi)
+}
+
 function removeSelectedElement(e) {
 	const trashIcon = e.target
 	//console.log(trashIcon)
@@ -107,7 +121,6 @@ function removeSelectedElement(e) {
 
 function completedElement(e) {
 	const checkIcon = e.target
-	console.log(checkIcon)
 	if (checkIcon.parentElement.parentElement === null) return
 	const selectedElement = checkIcon.parentElement
 	const selectedElementId = checkIcon.parentElement.id
@@ -138,8 +151,20 @@ function completedElement(e) {
 	}
 }
 
+function getKeyListFromLocalStorage() {
+	let keyList = []
+	for (let i = 0; i < localStorage.length; i++) {
+		keyList.push(localStorage.key(i))
+	}
+	listModel.innerHTML = ''
+	keyList.map(data => createSaveListElements(data))
+}
+
 function browserPreserveData(input) {
-	localStorage.clear()
+	getKeyListFromLocalStorage()
+	localStorage.removeItem('data')
+	//let KeyName = window.localStorage.key(index)
+	//console.log(KeyName)
 	let inputs
 	if (localStorage.getItem('data') === null) {
 		inputs = []
@@ -148,7 +173,18 @@ function browserPreserveData(input) {
 	}
 	inputs.push(input)
 	localStorage.setItem('data', JSON.stringify(inputs))
-	console.log(Array.from(localStorage))
+}
+
+function browserPreserveDataTest(input) {
+	localStorage.removeItem('test')
+	let test
+	if (localStorage.getItem('test') === null) {
+		test = []
+	} else {
+		test = JSON.parse(localStorage.getItem('test'))
+	}
+	test.push(input)
+	localStorage.setItem('test', JSON.stringify(test))
 }
 
 function nodeListToArray() {
@@ -161,15 +197,16 @@ function nodeListToArray() {
 	for (let i = 0; i < targetValue.length; i++) {
 		targetArray.push({ id: targetId[i], value: targetValue[i] })
 	}
-	browserPreserveData(targetArray)
+	browserPreserveDataTest(targetArray)
+	browserPreserveData()
 }
 
 function getSave() {
 	let save
-	if (localStorage.getItem('data') === null) {
+	if (localStorage.getItem('test') === null) {
 		save = [[]]
 	} else {
-		save = JSON.parse(localStorage.getItem('data'))
+		save = JSON.parse(localStorage.getItem('test'))
 	}
 	save[0].forEach(function (save) {
 		createListItems(save, save)
@@ -177,7 +214,6 @@ function getSave() {
 }
 
 function createTitle(text, id) {
-	console.log(text.value)
 	const containerDiv = document.createElement('div')
 	containerDiv.classList.add('flex', 'items-center', 'justify-center', 'w-full', 'max-w-md', 'text-lg', 'capitalize', 'text-center', 'font-semibold', 'text-gray-900', 'bg-white', 'rounded-lg', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-500', 'dark:text-white')
 	containerDiv.id = text.value
