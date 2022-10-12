@@ -148,6 +148,7 @@ function browserPreserveData(input) {
 	}
 	inputs.push(input)
 	localStorage.setItem('data', JSON.stringify(inputs))
+	console.log(Array.from(localStorage))
 }
 
 function nodeListToArray() {
@@ -176,14 +177,15 @@ function getSave() {
 }
 
 function createTitle(text, id) {
-	/* const containerDiv = document.createElement('div')
-	containerDiv.classList.add('flex', 'items-center', 'justify-center', 'w-full', 'max-w-md', 'text-sm', 'font-medium', 'text-gray-900', 'bg-white', 'rounded-lg', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
-	containerDiv.id = 'element-container'
+	console.log(text.value)
+	const containerDiv = document.createElement('div')
+	containerDiv.classList.add('flex', 'items-center', 'justify-center', 'w-full', 'max-w-md', 'text-lg', 'capitalize', 'text-center', 'font-semibold', 'text-gray-900', 'bg-white', 'rounded-lg', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-500', 'dark:text-white')
+	containerDiv.id = text.value
 
 	if (id.id === 'completed-element') {
 		containerDiv.classList.add('line-through', 'text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
 		containerDiv.classList.remove('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
-		containerDiv.id = 'completed-element'
+		containerDiv.id = 'title-element'
 	}
 
 	const elementLi = document.createElement('li')
@@ -196,11 +198,7 @@ function createTitle(text, id) {
 	} else {
 		elementLi.innerText = text.value
 	}
-
+	title.innerHTML = ''
 	title.appendChild(containerDiv)
-} */
-
-	title.innerHTML = `<div class="flex items-center justify-center w-full max-w-md text-lg font-semibold text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-600 dark:border-gray-500 dark:text-white" id="element-container">
-		<li class="py-2 px-4 w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600" id="text-element">Title of List</li>
-	</div>`
+	console.log(title.innerHTML)
 }
