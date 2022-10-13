@@ -1,9 +1,9 @@
 import './style.css'
 
-const textInput = document.querySelector('#text-input')
-const sort = document.querySelector('#dropdown')
+const listTextInput = document.querySelector('#text-input')
+const listSort = document.querySelector('#dropdown')
 const list = document.querySelector('#app')
-const enterBtn = document.querySelector('#enter-btn')
+const listEnterBtn = document.querySelector('#enter-btn')
 const title = document.querySelector('#app-title')
 const titleInputModal = document.querySelector('#text-input-modal')
 const titleBtnModal = document.querySelector('#save-list-name')
@@ -14,6 +14,8 @@ const saveloadBtn = document.querySelector('#save-load-btn')
 document.addEventListener('DOMContentLoaded', () => {
 	checkForSaveKey()
 	getPreservedData('default')
+	console.log('create title')
+	createTitleElement('default', 0)
 })
 
 saveloadBtn.addEventListener('click', () => {
@@ -38,6 +40,8 @@ titleBtnModal.addEventListener('click', () => {
 	checkForSaveKey(titleInputModal.value)
 	getKeyListFromLocalStorage()
 	createTitleElement(titleInputModal.value, 0)
+	list.innerHTML = ''
+	titleInputModal.value = ''
 
 	console.log(title.firstChild.id)
 })
@@ -50,18 +54,22 @@ titleListModel.addEventListener('click', e => {
 	getPreservedData(target.innerHTML)
 })
 
-enterBtn.addEventListener('click', event => {
+listEnterBtn.addEventListener('click', event => {
 	event.preventDefault()
-	createListItems(textInput, 0)
+	createListItems(listTextInput, 0)
 	//nodeListToArray()
-	setPreservedData(nodeListToArray(), title.firstChild.id)
-	textInput.value = ''
+	if (title.firstChild.id === null || undefined) {
+		setPreservedData(nodeListToArray(), 'default')
+	} else {
+		setPreservedData(nodeListToArray(), title.firstChild.id)
+	}
+	listTextInput.value = ''
 })
 
-textInput.addEventListener('keyup', function (event) {
+listTextInput.addEventListener('keyup', function (event) {
 	if (event.keyCode === 13) {
 		event.preventDefault()
-		enterBtn.click()
+		listEnterBtn.click()
 	}
 })
 
@@ -240,11 +248,14 @@ function getPreservedData(key) {
 	} else {
 		save = JSON.parse(localStorage.getItem(key))
 	}
-	save[0].forEach(function (save) {
-		createListItems(save, save)
-	})
+	if (save[0] === undefined) {
+		return
+	} else {
+		save[0].forEach(function (save) {
+			createListItems(save, save)
+		})
+	}
 }
-
 //Data
 
 function nodeListToArray() {
@@ -281,8 +292,10 @@ function checkForSaveKey(text) {
 		} else if (text === undefined) {
 			return
 		} else {
-			localStorage.setItem(text, '[]')
-			return data
+			localStorage.setItem(text.toLowerCase(), '[]')
+			setPreservedData(nodeListToArray(), data)
+			localStorage.removeItem('default')
+			return
 		}
 	})
 }
