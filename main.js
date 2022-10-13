@@ -1,49 +1,84 @@
 import './style.css'
 
 const textInput = document.querySelector('#text-input')
-const dropdown = document.querySelector('#dropdown')
+const sort = document.querySelector('#dropdown')
 const list = document.querySelector('#app')
 const enterBtn = document.querySelector('#enter-btn')
 const title = document.querySelector('#app-title')
-const textInputModal = document.querySelector('#text-input-modal')
-const enterBtnModal = document.querySelector('#save-list-name')
-const listModel = document.querySelector('#list-modal')
+const titleInputModal = document.querySelector('#text-input-modal')
+const titleBtnModal = document.querySelector('#save-list-name')
+const titleListModel = document.querySelector('#list-modal')
+const saveloadBtn = document.querySelector('#save-load-btn')
 
-document.addEventListener('DOMContentLoaded', getSave)
-enterBtn.addEventListener('click', appendTextToList)
-list.addEventListener('click', removeSelectedElement)
-list.addEventListener('click', completedElement)
-enterBtnModal.addEventListener('click', appendModalTextToTitle)
+//Events
+document.addEventListener('DOMContentLoaded', () => {
+	checkForSaveKey()
+	getPreservedData('default')
+})
 
-//event listener for text input on enter key
+saveloadBtn.addEventListener('click', () => {
+	//getKeyListFromLocalStorage()
+	createSaveListElements()
+})
+
+list.addEventListener('click', e => {
+	if (e.target.id === 'check-off' || e.target.parentElement.id === 'check-on') return
+	removeSelectedElement(e)
+
+	setPreservedData(nodeListToArray(), title.firstChild.id)
+})
+
+list.addEventListener('click', e => {
+	if (e.target.id === 'trash-btn') return
+	completedElement(e)
+
+	setPreservedData(nodeListToArray(), title.firstChild.id)
+})
+titleBtnModal.addEventListener('click', () => {
+	checkForSaveKey(titleInputModal.value)
+	getKeyListFromLocalStorage()
+	createTitleElement(titleInputModal.value, 0)
+
+	console.log(title.firstChild.id)
+})
+
+titleListModel.addEventListener('click', e => {
+	const target = e.target
+	target.innerHTML
+	createTitleElement(target.innerHTML, 0)
+	list.innerHTML = ''
+	getPreservedData(target.innerHTML)
+})
+
+enterBtn.addEventListener('click', event => {
+	event.preventDefault()
+	createListItems(textInput, 0)
+	//nodeListToArray()
+	setPreservedData(nodeListToArray(), title.firstChild.id)
+	textInput.value = ''
+})
+
 textInput.addEventListener('keyup', function (event) {
 	if (event.keyCode === 13) {
 		event.preventDefault()
-		browserPreserveData()
 		enterBtn.click()
 	}
 })
 
-textInputModal.addEventListener('keyup', function (event) {
+titleInputModal.addEventListener('keyup', function (event) {
 	if (event.keyCode === 13) {
 		event.preventDefault()
-		enterBtnModal.click()
+		titleBtnModal.click()
+		/* checkForSaveKey(textInputModal.value)
+		getKeyListFromLocalStorage()
+		console.log(title.firstChild.id) */
+		//setPreservedData(nodeListToArray, 'data')
+
+		//textInputModal.value = ''
 	}
 })
 
-function appendTextToList(event) {
-	event.preventDefault()
-	createListItems(textInput, 0)
-	nodeListToArray()
-	textInput.value = ''
-}
-
-function appendModalTextToTitle(event) {
-	event.preventDefault()
-	createTitle(textInputModal, 0)
-
-	textInputModal.value = ''
-}
+//Creating DOM elements
 
 function createListItems(text, id) {
 	const containerDiv = document.createElement('div')
@@ -94,18 +129,46 @@ function createListItems(text, id) {
 }
 
 function createSaveListElements(data) {
+	if (data === undefined) return
 	const elementLi = document.createElement('li')
 	elementLi.id = 'all'
 
 	const elementLabel = document.createElement('label')
 	elementLabel.classList.add('btn', 'btn-ghost')
 	elementLabel.setAttribute('for', 'save-modal')
-	elementLabel.id = 'save-1'
+	//elementLabel.id = textInputModal.value
 	elementLabel.innerHTML = data
 	elementLi.appendChild(elementLabel)
-	listModel.appendChild(elementLi)
+	titleListModel.appendChild(elementLi)
 }
 
+function createTitleElement(text, id) {
+	const containerDiv = document.createElement('div')
+	containerDiv.classList.add('flex', 'items-center', 'justify-center', 'w-full', 'max-w-md', 'text-lg', 'capitalize', 'text-center', 'font-semibold', 'text-gray-900', 'bg-white', 'rounded-lg', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-500', 'dark:text-white')
+	containerDiv.id = text
+
+	if (id.id === 'completed-element') {
+		containerDiv.classList.add('line-through', 'text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
+		containerDiv.classList.remove('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
+		containerDiv.id = 'title-element'
+	}
+
+	const elementLi = document.createElement('li')
+	elementLi.classList.add('py-2', 'px-4', 'w-full', 'rounded-t-lg', 'border-b', 'border-gray-200', 'dark:border-gray-600')
+	elementLi.id = 'text-element'
+	containerDiv.appendChild(elementLi)
+
+	if (text === '' || undefined) {
+		return
+	} else {
+		elementLi.innerText = text
+	}
+	title.innerHTML = ''
+	title.appendChild(containerDiv)
+	//console.log(title.innerHTML)
+}
+
+//Mod the DOM elements
 function removeSelectedElement(e) {
 	const trashIcon = e.target
 	//console.log(trashIcon)
@@ -113,7 +176,6 @@ function removeSelectedElement(e) {
 	const selectedElementId = trashIcon.parentElement.id
 	if ((selectedElementId === 'element-container' || 'completed-element') && trashIcon.id === 'trash-btn') {
 		selectedElement.remove()
-		nodeListToArray()
 	} else {
 		return
 	}
@@ -140,52 +202,50 @@ function completedElement(e) {
 		selectedElement.classList.remove('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
 		selectedElement.classList.add('line-through', 'text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
 		selectedElement.id = 'completed-element'
-		nodeListToArray()
 	} else if (selectedElementId === 'completed-element') {
 		selectedElement.classList.remove('line-through', 'text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
 		selectedElement.classList.add('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
 		selectedElement.id = 'element-container'
-		nodeListToArray()
 	} else {
 		return
 	}
 }
 
-function getKeyListFromLocalStorage() {
-	let keyList = []
-	for (let i = 0; i < localStorage.length; i++) {
-		keyList.push(localStorage.key(i))
-	}
-	listModel.innerHTML = ''
-	keyList.map(data => createSaveListElements(data))
-}
+//Storage
 
-function browserPreserveData(input) {
-	getKeyListFromLocalStorage()
-	localStorage.removeItem('data')
-	//let KeyName = window.localStorage.key(index)
-	//console.log(KeyName)
+function setPreservedData(input, key) {
+	if (key === undefined) {
+		key = 'default'
+	}
+	localStorage.removeItem(key)
+
 	let inputs
-	if (localStorage.getItem('data') === null) {
+	if (localStorage.getItem(key) === null) {
 		inputs = []
 	} else {
-		inputs = JSON.parse(localStorage.getItem('data'))
+		inputs = JSON.parse(localStorage.getItem(key))
 	}
 	inputs.push(input)
-	localStorage.setItem('data', JSON.stringify(inputs))
+	if (key === undefined) {
+		localStorage.setItem('default', JSON.stringify(inputs))
+	} else {
+		localStorage.setItem(key, JSON.stringify(inputs))
+	}
 }
 
-function browserPreserveDataTest(input) {
-	localStorage.removeItem('test')
-	let test
-	if (localStorage.getItem('test') === null) {
-		test = []
+function getPreservedData(key) {
+	let save
+	if (localStorage.getItem(key) === null) {
+		save = [[]]
 	} else {
-		test = JSON.parse(localStorage.getItem('test'))
+		save = JSON.parse(localStorage.getItem(key))
 	}
-	test.push(input)
-	localStorage.setItem('test', JSON.stringify(test))
+	save[0].forEach(function (save) {
+		createListItems(save, save)
+	})
 }
+
+//Data
 
 function nodeListToArray() {
 	let target = []
@@ -197,44 +257,32 @@ function nodeListToArray() {
 	for (let i = 0; i < targetValue.length; i++) {
 		targetArray.push({ id: targetId[i], value: targetValue[i] })
 	}
-	browserPreserveDataTest(targetArray)
-	browserPreserveData()
+	console.log(targetArray)
+	return targetArray
 }
 
-function getSave() {
-	let save
-	if (localStorage.getItem('test') === null) {
-		save = [[]]
-	} else {
-		save = JSON.parse(localStorage.getItem('test'))
+function getKeyListFromLocalStorage() {
+	let keyList = []
+	for (let i = 0; i < localStorage.length; i++) {
+		keyList.push(localStorage.key(i))
 	}
-	save[0].forEach(function (save) {
-		createListItems(save, save)
+	titleListModel.innerHTML = ''
+	keyList.map(data => createSaveListElements(data))
+	console.log(keyList)
+	return keyList
+}
+
+function checkForSaveKey(text) {
+	if (!getKeyListFromLocalStorage().includes('default')) localStorage.setItem('default', '[]')
+	//console.log(getKeyListFromLocalStorage())
+	getKeyListFromLocalStorage().map(data => {
+		if (!data === titleInputModal.value) {
+			return data
+		} else if (text === undefined) {
+			return
+		} else {
+			localStorage.setItem(text, '[]')
+			return data
+		}
 	})
-}
-
-function createTitle(text, id) {
-	const containerDiv = document.createElement('div')
-	containerDiv.classList.add('flex', 'items-center', 'justify-center', 'w-full', 'max-w-md', 'text-lg', 'capitalize', 'text-center', 'font-semibold', 'text-gray-900', 'bg-white', 'rounded-lg', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-500', 'dark:text-white')
-	containerDiv.id = text.value
-
-	if (id.id === 'completed-element') {
-		containerDiv.classList.add('line-through', 'text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
-		containerDiv.classList.remove('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
-		containerDiv.id = 'title-element'
-	}
-
-	const elementLi = document.createElement('li')
-	elementLi.classList.add('py-2', 'px-4', 'w-full', 'rounded-t-lg', 'border-b', 'border-gray-200', 'dark:border-gray-600')
-	elementLi.id = 'text-element'
-	containerDiv.appendChild(elementLi)
-
-	if (text.value === '' || undefined) {
-		return
-	} else {
-		elementLi.innerText = text.value
-	}
-	title.innerHTML = ''
-	title.appendChild(containerDiv)
-	console.log(title.innerHTML)
 }
