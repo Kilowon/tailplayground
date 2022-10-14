@@ -35,18 +35,17 @@ list.addEventListener('click', e => {
 
 	setPreservedData(nodeListToArray(), title.firstChild.id)
 })
-/* newListSave.addEventListener('click', () => {
+newListSave.addEventListener('click', () => {
 	checkForSaveKey(titleInputModal.value)
+	titleListModel.innerHTML = ''
 	getKeyListFromLocalStorage()
 	createTitleElement(titleInputModal.value, 0)
-
 	list.innerHTML = ''
 	getPreservedData(title.firstChild.id)
 	titleInputModal.value = ''
-}) */
+})
 titleBtnModal.addEventListener('click', () => {
 	checkForSaveKey(titleInputModal.value)
-	//getKeyListFromLocalStorage()
 	createTitleElement(titleInputModal.value, 0)
 	setPreservedData(nodeListToArray(), title.firstChild.id)
 	list.innerHTML = ''
