@@ -1,8 +1,8 @@
 import './style.css'
 
+const list = document.querySelector('#app')
 const listTextInput = document.querySelector('#text-input')
 const listSort = document.querySelector('#dropdown')
-const list = document.querySelector('#app')
 const listEnterBtn = document.querySelector('#enter-btn')
 const title = document.querySelector('#app-title')
 const titleInputModal = document.querySelector('#text-input-modal')
@@ -13,9 +13,8 @@ const saveloadBtn = document.querySelector('#save-load-btn')
 //Events
 document.addEventListener('DOMContentLoaded', () => {
 	checkForSaveKey()
-	getPreservedData('default')
-	console.log('create title')
-	createTitleElement('default', 0)
+	getPreservedData('unsaved')
+	createTitleElement('unsaved', 0)
 })
 
 saveloadBtn.addEventListener('click', () => {
@@ -40,10 +39,10 @@ titleBtnModal.addEventListener('click', () => {
 	checkForSaveKey(titleInputModal.value)
 	getKeyListFromLocalStorage()
 	createTitleElement(titleInputModal.value, 0)
+	setPreservedData(nodeListToArray(), title.firstChild.id)
 	list.innerHTML = ''
+	getPreservedData(title.firstChild.id)
 	titleInputModal.value = ''
-
-	console.log(title.firstChild.id)
 })
 
 titleListModel.addEventListener('click', e => {
@@ -59,7 +58,7 @@ listEnterBtn.addEventListener('click', event => {
 	createListItems(listTextInput, 0)
 	//nodeListToArray()
 	if (title.firstChild.id === null || undefined) {
-		setPreservedData(nodeListToArray(), 'default')
+		setPreservedData(nodeListToArray(), 'unsaved')
 	} else {
 		setPreservedData(nodeListToArray(), title.firstChild.id)
 	}
@@ -77,12 +76,6 @@ titleInputModal.addEventListener('keyup', function (event) {
 	if (event.keyCode === 13) {
 		event.preventDefault()
 		titleBtnModal.click()
-		/* checkForSaveKey(textInputModal.value)
-		getKeyListFromLocalStorage()
-		console.log(title.firstChild.id) */
-		//setPreservedData(nodeListToArray, 'data')
-
-		//textInputModal.value = ''
 	}
 })
 
@@ -223,7 +216,7 @@ function completedElement(e) {
 
 function setPreservedData(input, key) {
 	if (key === undefined) {
-		key = 'default'
+		key = 'unsaved'
 	}
 	localStorage.removeItem(key)
 
@@ -235,7 +228,7 @@ function setPreservedData(input, key) {
 	}
 	inputs.push(input)
 	if (key === undefined) {
-		localStorage.setItem('default', JSON.stringify(inputs))
+		localStorage.setItem('unsaved', JSON.stringify(inputs))
 	} else {
 		localStorage.setItem(key, JSON.stringify(inputs))
 	}
@@ -268,7 +261,6 @@ function nodeListToArray() {
 	for (let i = 0; i < targetValue.length; i++) {
 		targetArray.push({ id: targetId[i], value: targetValue[i] })
 	}
-	console.log(targetArray)
 	return targetArray
 }
 
@@ -279,12 +271,11 @@ function getKeyListFromLocalStorage() {
 	}
 	titleListModel.innerHTML = ''
 	keyList.map(data => createSaveListElements(data))
-	console.log(keyList)
 	return keyList
 }
 
 function checkForSaveKey(text) {
-	if (!getKeyListFromLocalStorage().includes('default')) localStorage.setItem('default', '[]')
+	if (!getKeyListFromLocalStorage().includes('default')) localStorage.setItem('unsaved', '[]')
 	//console.log(getKeyListFromLocalStorage())
 	getKeyListFromLocalStorage().map(data => {
 		if (!data === titleInputModal.value) {
@@ -294,7 +285,7 @@ function checkForSaveKey(text) {
 		} else {
 			localStorage.setItem(text.toLowerCase(), '[]')
 			setPreservedData(nodeListToArray(), data)
-			localStorage.removeItem('default')
+			localStorage.removeItem('unsaved')
 			return
 		}
 	})
