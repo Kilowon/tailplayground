@@ -35,7 +35,7 @@ list.addEventListener('click', e => {
 
 	setPreservedData(nodeListToArray(), title.firstChild.id)
 })
-newListSave.addEventListener('click', () => {
+/* newListSave.addEventListener('click', () => {
 	checkForSaveKey(titleInputModal.value)
 	getKeyListFromLocalStorage()
 	createTitleElement(titleInputModal.value, 0)
@@ -43,10 +43,10 @@ newListSave.addEventListener('click', () => {
 	list.innerHTML = ''
 	getPreservedData(title.firstChild.id)
 	titleInputModal.value = ''
-})
+}) */
 titleBtnModal.addEventListener('click', () => {
 	checkForSaveKey(titleInputModal.value)
-	getKeyListFromLocalStorage()
+	//getKeyListFromLocalStorage()
 	createTitleElement(titleInputModal.value, 0)
 	setPreservedData(nodeListToArray(), title.firstChild.id)
 	list.innerHTML = ''
@@ -236,11 +236,8 @@ function setPreservedData(input, key) {
 		inputs = JSON.parse(localStorage.getItem(key))
 	}
 	inputs.push(input)
-	if (key === undefined) {
-		localStorage.setItem('unsaved', JSON.stringify(inputs))
-	} else {
-		localStorage.setItem(key, JSON.stringify(inputs))
-	}
+
+	localStorage.setItem(key, JSON.stringify(inputs))
 }
 
 function getPreservedData(key) {
@@ -296,7 +293,6 @@ function checkForSaveKey(text) {
 			return
 		} else {
 			localStorage.setItem(text.toLowerCase(), '[]')
-			setPreservedData(nodeListToArray(), data)
 			localStorage.removeItem('unsaved')
 			return
 		}
