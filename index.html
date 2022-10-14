@@ -3,6 +3,7 @@
 	<head>
 		<meta name="description" content="a little list app for andriod and ios or windows" />
 		<meta charset="UTF-8" />
+		<meta http-equiv="Content-Security-Policy" />
 		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>List App</title>
@@ -13,15 +14,15 @@
 				<div class="form-control w-full max-w-md m-2">
 					<label class="label">
 						<span class="label-text">What to do?</span>
-						<span class="label-text-alt"><button class="btn btn-ghost btn-xs" id="enter-btn" type="submit">Add</button></span>
+						<span class="label-text-alt"><button class="btn btn-ghost btn-xs" aria-label="add text to list button" id="enter-btn" type="submit">Add</button></span>
 					</label>
-					<input type="text" placeholder="" class="input input-bordered input-med" id="text-input" />
+					<input type="text" placeholder="" class="input input-bordered input-med" aria-label="imput text for list here" id="text-input" />
 					<label class="label">
 						<span class="label-text-alt">
 							<!-- The button to open modal -->
-							<label for="sort-modal" class="btn modal-button btn-xs btn-ghost">SORT</label>
+							<label for="sort-modal" aria-label="visually sort list button" class="btn modal-button btn-xs btn-ghost">SORT</label>
 						</span>
-						<span class="label-text-alt"><label for="save-modal" class="btn modal-button btn-xs btn-ghost" id="save-load-btn">Save &#9900; Load</label></span>
+						<span class="label-text-alt"><label for="save-modal" aria-label="goto save page button" class="btn modal-button btn-xs btn-ghost" id="save-load-btn">Save &#9900; Load</label></span>
 					</label>
 				</div>
 			</div>
@@ -36,9 +37,9 @@
 				<div class="modal-box">
 					<h3 class="font-bold text-lg m-1">How would you like to sort your list?</h3>
 					<ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-full" id="dropdown">
-						<li id="all"><label for="sort-modal" class="btn btn-ghost">All</label></li>
-						<li id="completed"><label for="sort-modal" class="btn btn-ghost">Completed</label></li>
-						<li id="uncompleted"><label for="sort-modal" class="btn btn-ghost">Uncompleted</label></li>
+						<li id="all"><label for="sort-modal" aria-label="all list items displayed button" class="btn btn-ghost">All</label></li>
+						<li id="completed"><label for="sort-modal" aria-label="completed list items displayed button" class="btn btn-ghost">Completed</label></li>
+						<li id="uncompleted"><label for="sort-modal" aria-label="uncompleted list items displayed button" class="btn btn-ghost">Uncompleted</label></li>
 					</ul>
 				</div>
 			</div>
@@ -49,14 +50,14 @@
 				<label class="modal-box relative" for="save-modal">
 					<h3 class="font-bold text-lg m-1"></h3>
 
-					<div class="display: flex items-center justify-center" id="form">
+					<div class="display: flex items-center justify-center" aria-label="save name form" id="form">
 						<div class="form-control w-full max-w-md m-2">
 							<label class="label">
-								<span class="label-text-alt"><label for="save-modal" class="btn btn-ghost" id="save-list-name">Save</label></span>
-								<span class="label-text-alt"><label for="save-modal" class="btn btn-ghost" id="new-empty-list">New</label></span>
-								<span class="label-text-alt"><label for="save-modal" class="btn btn-ghost" id="cancel">Cancel</label></span>
+								<span class="label-text-alt"><label for="save-modal" aria-label="save" class="btn btn-ghost" id="save-list-name">Save</label></span>
+								<span class="label-text-alt"><label for="save-modal" aria-label="new" class="btn btn-ghost" id="new-empty-list">New</label></span>
+								<span class="label-text-alt"><label for="save-modal" aria-label="cancel" class="btn btn-ghost" id="cancel">Cancel</label></span>
 							</label>
-							<input type="text" placeholder="" class="input input-bordered input-med" id="text-input-modal" />
+							<input type="text" placeholder="" aria-label="input save name here" class="input input-bordered input-med" id="text-input-modal" />
 						</div>
 					</div>
 					<h3 class="font-normal text-sm m-1">LOAD LIST</h3>
