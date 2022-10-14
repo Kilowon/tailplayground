@@ -9,6 +9,7 @@ const titleInputModal = document.querySelector('#text-input-modal')
 const titleBtnModal = document.querySelector('#save-list-name')
 const titleListModel = document.querySelector('#list-modal')
 const saveloadBtn = document.querySelector('#save-load-btn')
+const newListSave = document.querySelector('#new-empty-list')
 
 //Events
 document.addEventListener('DOMContentLoaded', () => {
@@ -18,8 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 saveloadBtn.addEventListener('click', () => {
-	//getKeyListFromLocalStorage()
-	createSaveListElements()
+	getKeyListFromLocalStorage()
 })
 
 list.addEventListener('click', e => {
@@ -34,6 +34,15 @@ list.addEventListener('click', e => {
 	completedElement(e)
 
 	setPreservedData(nodeListToArray(), title.firstChild.id)
+})
+newListSave.addEventListener('click', () => {
+	checkForSaveKey(titleInputModal.value)
+	getKeyListFromLocalStorage()
+	createTitleElement(titleInputModal.value, 0)
+
+	list.innerHTML = ''
+	getPreservedData(title.firstChild.id)
+	titleInputModal.value = ''
 })
 titleBtnModal.addEventListener('click', () => {
 	checkForSaveKey(titleInputModal.value)
@@ -270,7 +279,10 @@ function getKeyListFromLocalStorage() {
 		keyList.push(localStorage.key(i))
 	}
 	titleListModel.innerHTML = ''
-	keyList.map(data => createSaveListElements(data))
+	keyList.map(data => {
+		if (data === 'unsaved') return
+		return createSaveListElements(data)
+	})
 	return keyList
 }
 
