@@ -15,6 +15,7 @@
 		"vite": "^3.1.0"
 	},
 	"dependencies": {
-		"daisyui": "^2.31.0"
+		"daisyui": "^2.31.0",
+		"html5sortable": "^0.13.3"
 	}
 }

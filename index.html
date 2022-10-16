@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bg-lightDeepTeal-500 text-lightDeepTeal-900 dark:bg-darkDeepTeal-900 dark:text-darkDeepTeal-50">
 	<head>
 		<meta name="description" content="a little list app for andriod and ios or windows" />
 		<meta charset="UTF-8" />
@@ -13,23 +13,26 @@
 			<div class="display: flex items-center justify-center" id="form">
 				<div class="form-control w-full max-w-md m-2">
 					<label class="label">
-						<span class="label-text">What to do?</span>
-						<span class="label-text-alt"><button class="btn btn-ghost btn-xs" aria-label="add text to list button" id="enter-btn" type="submit">Add</button></span>
+						<span class="label-text dark:text-gray-50">What to do?</span>
+						<span class="label-text-alt dark:text-gray-50"><button class="btn btn-ghost btn-xs" aria-label="add text to list button" id="enter-btn" type="submit">Add</button></span>
 					</label>
-					<input type="text" placeholder="" class="input input-bordered input-med" aria-label="imput text for list here" id="text-input" />
+					<input type="text" placeholder="" class="input input-bordered input-med dark:bg-darkDeepTeal-300 dark:text-darkDeepTeal-900" aria-label="imput text for list here" id="text-input" />
 					<label class="label">
-						<span class="label-text-alt">
+						<span class="label-text-alt dark:text-gray-50">
 							<!-- The button to open modal -->
 							<label for="sort-modal" aria-label="visually sort list button" class="btn modal-button btn-xs btn-ghost">SORT</label>
 						</span>
-						<span class="label-text-alt"><label for="save-modal" aria-label="goto save page button" class="btn modal-button btn-xs btn-ghost" id="save-load-btn">Save &#9900; Load</label></span>
+						<span class="label-text-alt dark:text-gray-50"><label for="save-modal" aria-label="goto save page button" class="btn modal-button btn-xs btn-ghost" id="save-load-btn">Save &#9900; Load</label></span>
 					</label>
 				</div>
 			</div>
 			<ul class="display: flex justify-center items-center flex-col-reverse overflow-y-auto m-2" id="app-title"></ul>
-			<ul class="display: flex justify-center items-center flex-col-reverse overflow-y-auto m-2" id="app"></ul>
+			<ul class="sortable display: flex justify-center items-center flex-col-reverse overflow-y-auto m-2" id="app"></ul>
 
 			<script type="module" src="/main.js"></script>
+			<script type="module" src="/html5sortable.js">
+				sortable('.sortable')
+			</script>
 
 			<!-- Put this part before </body> tag -->
 			<input type="checkbox" id="sort-modal" class="modal-toggle" />
@@ -47,7 +50,7 @@
 			<!-- Put this part before </body> tag -->
 			<input type="checkbox" id="save-modal" class="modal-toggle" />
 			<label for="save-modal" class="modal cursor-pointer">
-				<label class="modal-box relative" for="save-modal">
+				<label class="modal-box relative bg-lightDeepTeal-600 text-lightDeepTeal-900 dark:bg-darkDeepTeal-800 dark:text-darkDeepTeal-50" for="save-modal">
 					<h3 class="font-bold text-lg m-1"></h3>
 
 					<div class="display: flex items-center justify-center" aria-label="save name form" id="form">
@@ -57,11 +60,11 @@
 								<span class="label-text-alt"><label for="save-modal" aria-label="new" class="btn btn-ghost" id="new-empty-list">New</label></span>
 								<span class="label-text-alt"><label for="save-modal" aria-label="cancel" class="btn btn-ghost" id="cancel">Cancel</label></span>
 							</label>
-							<input type="text" placeholder="" aria-label="input save name here" class="input input-bordered input-med" id="text-input-modal" />
+							<input type="text" placeholder="" aria-label="input save name here" onkeydown="return /[a-z]/i.test(event.key)" class="input input-bordered input-med text-darkDeepTeal-900 bg-lightDeepTeal-100 border-lightDeepTeal-600 dark:text-darkDeepTeal-900 dark:bg-darkDeepTeal-100 dark:border-darkDeepTeal-500" id="text-input-modal" />
 						</div>
 					</div>
 					<h3 class="font-normal text-sm m-1">LOAD LIST</h3>
-					<ul tabindex="1" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-full" id="list-modal"></ul>
+					<ul tabindex="1" class="dropdown-content menu p-2 shadow border bg-lightDeepTeal-100 border-lightDeepTeal-600 text-lightDeepTeal-900 dark:bg-darkDeepTeal-700 dark:border-darkDeepTeal-500 dark:text-darkDeepTeal-50 rounded-box w-full" id="list-modal"></ul>
 				</label>
 			</label>
 		</div>

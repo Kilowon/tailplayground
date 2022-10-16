@@ -6,16 +6,14 @@ const listSort = document.querySelector('#dropdown')
 const listEnterBtn = document.querySelector('#enter-btn')
 const title = document.querySelector('#app-title')
 const titleInputModal = document.querySelector('#text-input-modal')
-const titleBtnModal = document.querySelector('#save-list-name')
+const titleSaveCurrentAs = document.querySelector('#save-list-name')
 const titleListModel = document.querySelector('#list-modal')
 const saveloadBtn = document.querySelector('#save-load-btn')
-const newListSave = document.querySelector('#new-empty-list')
+const titleNewEmpty = document.querySelector('#new-empty-list')
 
 //Events
 document.addEventListener('DOMContentLoaded', () => {
-	checkForSaveKey()
-	getPreservedData('unsaved')
-	createTitleElement('unsaved', 0)
+	createTitleElement('unsaved')
 })
 
 saveloadBtn.addEventListener('click', () => {
@@ -35,19 +33,16 @@ list.addEventListener('click', e => {
 
 	setPreservedData(nodeListToArray(), title.firstChild.id)
 })
-newListSave.addEventListener('click', () => {
-	checkForSaveKey(titleInputModal.value)
+titleNewEmpty.addEventListener('click', () => {
 	titleListModel.innerHTML = ''
 	getKeyListFromLocalStorage()
-	createTitleElement(titleInputModal.value, 0)
+	createTitleElement(titleInputModal.value)
 	list.innerHTML = ''
 	getPreservedData(title.firstChild.id)
 	titleInputModal.value = ''
 })
-titleBtnModal.addEventListener('click', () => {
-	checkForSaveKey(titleInputModal.value)
-	createTitleElement(titleInputModal.value, 0)
-	setPreservedData(nodeListToArray(), title.firstChild.id)
+titleSaveCurrentAs.addEventListener('click', () => {
+	createTitleElement(titleInputModal.value)
 	list.innerHTML = ''
 	getPreservedData(title.firstChild.id)
 	titleInputModal.value = ''
@@ -56,7 +51,7 @@ titleBtnModal.addEventListener('click', () => {
 titleListModel.addEventListener('click', e => {
 	const target = e.target
 	target.innerHTML
-	createTitleElement(target.innerHTML, 0)
+	createTitleElement(target.innerHTML)
 	list.innerHTML = ''
 	getPreservedData(target.innerHTML)
 })
@@ -64,12 +59,7 @@ titleListModel.addEventListener('click', e => {
 listEnterBtn.addEventListener('click', event => {
 	event.preventDefault()
 	createListItems(listTextInput, 0)
-	//nodeListToArray()
-	if (title.firstChild.id === null || undefined) {
-		setPreservedData(nodeListToArray(), 'unsaved')
-	} else {
-		setPreservedData(nodeListToArray(), title.firstChild.id)
-	}
+	setPreservedData(nodeListToArray(), title.firstChild.id)
 	listTextInput.value = ''
 })
 
@@ -83,61 +73,61 @@ listTextInput.addEventListener('keyup', function (event) {
 titleInputModal.addEventListener('keyup', function (event) {
 	if (event.keyCode === 13) {
 		event.preventDefault()
-		titleBtnModal.click()
+		titleSaveCurrentAs.click()
 	}
 })
 
 //Creating DOM elements
 
 function createListItems(text, id) {
-	const containerDiv = document.createElement('li')
-	containerDiv.classList.add('flex', 'items-center', 'justify-center', 'w-full', 'max-w-md', 'text-sm', 'font-medium', 'text-gray-900', 'bg-white', 'rounded-lg', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
-	containerDiv.id = 'element-container'
+	const containerLi = document.createElement('li')
+	containerLi.classList.add('flex', 'items-center', 'justify-center', 'w-full', 'max-w-md', 'text-sm', 'font-medium', 'text-gray-900', 'bg-white', 'rounded-lg', 'border', 'border-gray-200', 'dark:bg-darkDeepTeal-700', 'dark:border-darkDeepTeal-600', 'dark:text-white')
+	containerLi.id = 'element-container'
 
 	if (id.id === 'completed-element') {
-		containerDiv.classList.add('line-through', 'text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
-		containerDiv.classList.remove('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
-		containerDiv.id = 'completed-element'
+		containerLi.classList.remove('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-darkDeepTeal-700', 'dark:border-darkDeepTeal-600', 'dark:text-white')
+		containerLi.classList.add('line-through', 'text-gray-400', 'bg-gray-200', 'border', 'border-gray-400', 'border-gray-200', 'dark:bg-darkDeepTeal-800', 'dark:border-darkDeepTeal-600')
+		containerLi.id = 'completed-element'
 	}
 
-	const elementLi = document.createElement('div')
-	elementLi.classList.add('py-2', 'px-4', 'w-full', 'rounded-t-lg', 'border-b', 'border-gray-200', 'dark:border-gray-600')
-	elementLi.id = 'text-element'
-	containerDiv.appendChild(elementLi)
+	const elementDiv = document.createElement('div')
+	elementDiv.classList.add('py-2', 'px-4', 'w-full', 'rounded-t-lg')
+	elementDiv.id = 'text-element'
+	containerLi.appendChild(elementDiv)
 
 	const completedBtn = document.createElement('div')
 	//Dont create an element if the input is empty
 	if (text.value === '' || undefined) {
 		return
 	} else {
-		elementLi.innerText = text.value
+		elementDiv.innerText = text.value
 	}
 	completedBtn.classList.add('completed-btn')
 	completedBtn
 	if (id.id === 'completed-element') {
-		completedBtn.classList.add('btn', 'btn-sm', 'btn-ghost', 'text-green-600')
+		completedBtn.classList.add('btn', 'btn-sm', 'btn-ghost', 'text-green-600', 'dark:text-green-400')
 		completedBtn.setAttribute('aria-label', `button ${text.value} completed`)
 		completedBtn.id = 'check-on'
 		completedBtn.innerHTML = `<div class="pointer-events-none"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg></div>`
 	} else {
-		completedBtn.classList.add('btn', 'btn-sm', 'btn-ghost', 'text-gray-500')
+		completedBtn.classList.add('btn', 'btn-sm', 'btn-ghost', 'text-gray-500', 'dark:text-gray-400')
 		completedBtn.setAttribute('aria-label', `button ${text.value} completed `)
 		completedBtn.id = 'check-off'
 		completedBtn.innerHTML = `<div class="pointer-events-none"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg></div>`
 	}
 
-	containerDiv.appendChild(completedBtn)
+	containerLi.appendChild(completedBtn)
 
 	const trashBtn = document.createElement('button')
-	trashBtn.classList.add('btn', 'btn-sm', 'btn-ghost', 'text-gray-500')
+	trashBtn.classList.add('btn', 'btn-sm', 'btn-ghost', 'text-gray-500', 'dark:text-gray-400')
 	trashBtn.innerHTML = `<div class="pointer-events-none"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
 	<path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
   </svg></div>`
 	trashBtn.setAttribute('aria-label', `list button remove ${text.value}`)
 	trashBtn.id = 'trash-btn'
-	containerDiv.appendChild(trashBtn)
+	containerLi.appendChild(trashBtn)
 
-	list.appendChild(containerDiv)
+	list.appendChild(containerLi)
 }
 
 function createSaveListElements(data) {
@@ -155,30 +145,31 @@ function createSaveListElements(data) {
 	titleListModel.appendChild(elementLi)
 }
 
-function createTitleElement(text, id) {
-	const containerDiv = document.createElement('li')
-	containerDiv.classList.add('flex', 'items-center', 'justify-center', 'w-full', 'max-w-md', 'text-lg', 'capitalize', 'text-center', 'font-semibold', 'text-gray-900', 'bg-white', 'rounded-lg', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-500', 'dark:text-white')
-	containerDiv.id = text
+function createTitleElement(text) {
+	text = text.toLowerCase()
+	const containerLi = document.createElement('li')
+	containerLi.classList.add('flex', 'items-center', 'justify-center', 'w-full', 'max-w-md', 'text-lg', 'capitalize', 'text-center', 'font-semibold', 'text-gray-900', 'bg-lightDeepTeal-100', 'rounded-lg', 'border', 'border-lightDeepTeal-600', 'dark:bg-darkDeepTeal-800', 'dark:border-darkDeepTeal-500', 'dark:text-darkDeepTeal-50')
+	containerLi.id = text
 
-	if (id.id === 'completed-element') {
-		containerDiv.classList.add('line-through', 'text-gray-400', 'bg-gray-200', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
+	/* if (id.id === 'completed-element') {
+		containerDiv.classList.add('line-through', 'text-gray-400', 'bg-chlorophyll-600', 'border', 'border-gray-200', 'dark:bg-gray-600', 'dark:border-gray-600', 'dark:text-gray-400')
 		containerDiv.classList.remove('text-gray-900', 'bg-white', 'border', 'border-gray-200', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-white')
 		containerDiv.id = 'title-element'
-	}
+	} */
 
-	const elementLi = document.createElement('div')
-	elementLi.classList.add('py-2', 'px-4', 'w-full', 'rounded-t-lg', 'border-b', 'border-gray-200', 'dark:border-gray-600')
-	elementLi.id = 'text-element'
-	elementLi.setAttribute('aria-label', 'title `${text}`')
-	containerDiv.appendChild(elementLi)
+	const elementDiv = document.createElement('div')
+	elementDiv.classList.add('py-2', 'px-4', 'w-full', 'rounded-t-lg')
+	elementDiv.id = 'text-element'
+	elementDiv.setAttribute('aria-label', 'title `${text}`')
+	containerLi.appendChild(elementDiv)
 
 	if (text === '' || undefined) {
 		return
 	} else {
-		elementLi.innerText = text
+		elementDiv.innerText = text
 	}
 	title.innerHTML = ''
-	title.appendChild(containerDiv)
+	title.appendChild(containerLi)
 	//console.log(title.innerHTML)
 }
 
@@ -201,12 +192,12 @@ function completedElement(e) {
 	const selectedElement = checkIcon.parentElement
 	const selectedElementId = checkIcon.parentElement.id
 	if (checkIcon.id === 'check-on') {
-		checkIcon.classList.remove('text-green-600')
-		checkIcon.classList.add('text-gray-500')
+		checkIcon.classList.remove('text-green-600', 'dark:text-green-400')
+		checkIcon.classList.add('text-gray-500', 'dark:text-gray-400')
 		checkIcon.id = 'check-off'
 	} else if (checkIcon.id === 'check-off') {
-		checkIcon.classList.remove('text-gray-500')
-		checkIcon.classList.add('text-green-600')
+		checkIcon.classList.remove('text-gray-500', 'dark:text-gray-400')
+		checkIcon.classList.add('text-green-600', 'dark:text-green-400')
 		checkIcon.id = 'check-on'
 	} else {
 		return
@@ -226,22 +217,19 @@ function completedElement(e) {
 }
 
 //Storage
+function keyCheck(key) {
+	return getKeyListFromLocalStorage().includes(key) ? key : false
+}
 
-function setPreservedData(input, key) {
-	if (key === undefined) {
-		key = 'unsaved'
+function setPreservedData(data, key) {
+	key = key.toLowerCase()
+	if (keyCheck(key) === false) {
+		localStorage.setItem(key, '[]')
 	}
-	localStorage.removeItem(key)
-
-	let inputs
-	if (localStorage.getItem(key) === null) {
-		inputs = []
-	} else {
-		inputs = JSON.parse(localStorage.getItem(key))
-	}
-	inputs.push(input)
-
-	localStorage.setItem(key, JSON.stringify(inputs))
+	const localStorageData = []
+	localStorage.setItem(key, '[]')
+	localStorageData.push(data)
+	localStorage.setItem(key, JSON.stringify(localStorageData))
 }
 
 function getPreservedData(key) {
@@ -285,20 +273,4 @@ function getKeyListFromLocalStorage() {
 		return createSaveListElements(data)
 	})
 	return keyList
-}
-
-function checkForSaveKey(text) {
-	if (!getKeyListFromLocalStorage().includes('default')) localStorage.setItem('unsaved', '[]')
-	//console.log(getKeyListFromLocalStorage())
-	getKeyListFromLocalStorage().map(data => {
-		if (!data === titleInputModal.value) {
-			return data
-		} else if (text === undefined) {
-			return
-		} else {
-			localStorage.setItem(text.toLowerCase(), '[]')
-			localStorage.removeItem('unsaved')
-			return
-		}
-	})
 }
