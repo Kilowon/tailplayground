@@ -16,6 +16,6 @@
 	},
 	"dependencies": {
 		"daisyui": "^2.31.0",
-		"html5sortable": "^0.13.3"
+		"sortablejs": "^1.15.0"
 	}
 }

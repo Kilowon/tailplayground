@@ -1,4 +1,5 @@
 import './style.css'
+import Sortable from 'Sortablejs'
 
 const list = document.querySelector('#app')
 const listTextInput = document.querySelector('#text-input')
@@ -10,6 +11,14 @@ const titleSaveCurrentAs = document.querySelector('#save-list-name')
 const titleListModel = document.querySelector('#list-modal')
 const saveloadBtn = document.querySelector('#save-load-btn')
 const titleNewEmpty = document.querySelector('#new-empty-list')
+
+const sortable = Sortable.create(list, {
+	animation: 150,
+	easing: 'cubic-bezier(1, 0, 0.5, 0.5)',
+	onEnd: function (e) {
+		setPreservedData(nodeListToArray(), title.firstChild.id)
+	}
+})
 
 //Events
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,14 +32,12 @@ saveloadBtn.addEventListener('click', () => {
 list.addEventListener('click', e => {
 	if (e.target.id === 'check-off' || e.target.parentElement.id === 'check-on') return
 	removeSelectedElement(e)
-
 	setPreservedData(nodeListToArray(), title.firstChild.id)
 })
 
 list.addEventListener('click', e => {
 	if (e.target.id === 'trash-btn') return
 	completedElement(e)
-
 	setPreservedData(nodeListToArray(), title.firstChild.id)
 })
 titleNewEmpty.addEventListener('click', () => {
